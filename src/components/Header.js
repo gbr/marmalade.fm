@@ -9,10 +9,10 @@ const Header = props => (
                 <NavLink exact to="/" href="#" className="nav-link link biryani-black f6 ttu gray">What's hot</NavLink>
             </li>
             <li className="mh2">
-                <NavLink to="/archive" href="#" className="nav-link link biryani-black f6 ttu gray">About</NavLink>
+                <NavLink to="/archive" href="#" className="nav-link link biryani-black f6 ttu gray">Archive</NavLink>
             </li>
             <li className="mh2">
-                <NavLink to="/about" href="#" className="nav-link link biryani-black f6 ttu gray">Archive</NavLink>
+                <NavLink to="/about" href="#" className="nav-link link biryani-black f6 ttu gray">About</NavLink>
             </li>
         </ul>
     </div>
