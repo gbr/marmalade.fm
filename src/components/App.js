@@ -1,6 +1,6 @@
-/* global Mixcloud */
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import { connect } from 'react-redux'
 
 import About from './About';
 import Archive from './Archive';
@@ -8,34 +8,24 @@ import FeaturedMix from './FeaturedMix';
 import Header from './Header';
 import Home from './Home';
 import Show from './Show';
+import Player from './Player';
 
 import mixesData from '../data/mixes';
+import actions from '../store/actions'
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      playing: false,
-      currentMix: '',
-      mixIds: mixesData,
-      mix: null,
-      mixes: []
-    }
-  }
 
   fetchMixes = async () => {
-    const { mixIds } = this.state;
+    const { addMix } = this.props;
 
-    mixIds.map(async id => {
+    mixesData.map(async id => {
       try {
         const response = await fetch(
           `https://api.mixcloud.com/${id}`
         );
         const data = await response.json();
 
-        this.setState((prevState, props) => ({
-          mixes: [...prevState.mixes, data]
-        }));
+        addMix(data);
         // console.log(this.state.mixes)
       } catch (error) {
         console.error(error);
@@ -44,27 +34,7 @@ class App extends Component {
 
   }
 
-  mountAudio = async () => {
-    this.widget = Mixcloud.PlayerWidget(this.player);
-    await this.widget.ready;
-
-    // using the mixcloud widget events we can detect when our
-    // audio has been paused, set playing state to false
-    this.widget.events.pause.on(() =>
-      this.setState({
-        playing: false
-      })
-    );
-    // audio is playing again, set playing state to true
-    this.widget.events.play.on(() =>
-      this.setState({
-        playing: true
-      })
-    );
-  };
-
   componentDidMount() {
-    this.mountAudio();
     this.fetchMixes();
   }
 
@@ -91,7 +61,7 @@ class App extends Component {
 
   render() {
     // if array is empty, assign default value of empty object
-    const [firstMix = {}] = this.state.mixes;
+    const [firstMix = {}] = this.props.mixes;
 
     return (
       // router wraps our whole page and lets us use react-router
@@ -99,25 +69,25 @@ class App extends Component {
         {/* outermost container */}
         <div>
           {/* page container */}
-          <div className='flex-l justify-end'>
-            <FeaturedMix {...this.state} {...this.actions} {...firstMix} id={firstMix.key} />
+          <div className='flex-l justify-end'>`
+            <FeaturedMix {...this.state} {...this.actions} {...firstMix} />
             <div className="w-50-l relative z-1">
               <Header />
 
               {/* Routed page */}
-              <Route exact path="/" render={() => <Home {...this.state} {...this.actions} />} />
-              <Route path="/archive" render={() => <Archive {...this.state} {...this.actions} />} />
-              <Route path="/about" render={() => <About {...this.state} />} />
+              <Route exact path="/" component={Home} />
+              <Route path="/archive" component={Archive} />
+              <Route path="/about" component={About} />
 
-              <Route path="/show/:slug" render={routeParams => <Show {...routeParams} {...this.state} />} />
+              <Route path="/show/:slug" component={Show} />
             </div>
           </div>
           {/* AudioPlayer */}
-          <iframe title="Marmelade Player" src="https://www.mixcloud.com/widget/iframe/?hide_cover=1&mini=1&light=1&feed=%2Fspartacus%2Fparty-time%2F" width="100%" height="60" frameBorder="0" className="player db fixed bottom-0 z-5" ref={player => this.player = player} />
+          <Player />
         </div>
       </Router >
     );
   }
 }
 
-export default App;
+export default connect(state => state, actions)(App);

@@ -1,7 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
 import Stat from './Stat';
 
-export default function About({ mixes }) {
+import actions from '../store/actions'
+
+function About({ mixes, currentMix, setMix }) {
     return (
         <div className="ph3 ph4-l pad-bottom">
             <div className="measure center lh-copy">
@@ -21,3 +25,7 @@ export default function About({ mixes }) {
         </div>
     )
 }
+
+// this is how we connect react with redux
+// any component lacking this connection will not have access to redux
+export default connect(state => state, actions)(About);

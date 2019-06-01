@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-
+import React from 'react'
+import { connect } from 'react-redux';
 import differenceInDays from 'date-fns/difference_in_days'
 
 import Stat from './Stat'
@@ -18,24 +18,26 @@ const Tags = ({ tags = [] }) => (
     </div>
 )
 
-export default class Show extends Component {
-    render() {
-        const { match, mixes } = this.props;;
+const Show = ({ mix }) => (
+    <div className="ph3 ph4-l pad-bottom">
+        <div className="measure center lh-copy">
+            <Tags tags={mix.tags} />
 
-        const [mix = {}] = mixes.filter(mix => mix.slug === match.params.slug)
+            <p>{mix.description}</p>
 
-        return (
-            <div className="ph3 ph4-l pad-bottom">
-                <div className="measure center lh-copy">
-                    <Tags tags={mix.tags} />
+            <Stat statName="Played" statNumber={mix.play_count || 0} statWord="times" />
+            <Stat statName="Uploaded" statNumber={differenceInDays(new Date(), mix.created_time)} statWord="days ago" />
+            <Stat statName="Plays for" statNumber={mix.audio_length} statWord="seconds" />
+        </div>
+    </div>
+)
 
-                    <p>{mix.description}</p>
-
-                    <Stat statName="Played" statNumber={mix.play_count || 0} statWord="times" />
-                    <Stat statName="Uploaded" statNumber={differenceInDays(new Date(), mix.created_time)} statWord="days ago" />
-                    <Stat statName="Plays for" statNumber={mix.audio_length} statWord="seconds" />
-                </div>
-            </div>
-        );
-    }
+// this is called a selector—it takes a certain piece of data from our state
+const getMix = (mixes, slug) => {
+    const [mix = {}] = mixes.filter(mix => mix.slug === slug);
+    return mix;
 }
+
+export default connect((state, props) => ({
+    mix: getMix(state.mixes, props.match.params.slug)
+}))(Show)
