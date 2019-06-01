@@ -7,6 +7,7 @@ import Archive from './Archive';
 import FeaturedMix from './FeaturedMix';
 import Header from './Header';
 import Home from './Home';
+import Show from './Show';
 
 import mixesData from '../data/mixes';
 
@@ -31,9 +32,11 @@ class App extends Component {
           `https://api.mixcloud.com/${id}`
         );
         const data = await response.json();
+
         this.setState((prevState, props) => ({
           mixes: [...prevState.mixes, data]
-        }))
+        }));
+        // console.log(this.state.mixes)
       } catch (error) {
         console.error(error);
       }
@@ -105,6 +108,8 @@ class App extends Component {
               <Route exact path="/" render={() => <Home {...this.state} {...this.actions} />} />
               <Route path="/archive" render={() => <Archive {...this.state} {...this.actions} />} />
               <Route path="/about" render={() => <About {...this.state} />} />
+
+              <Route path="/show/:slug" render={routeParams => <Show {...routeParams} {...this.state} />} />
             </div>
           </div>
           {/* AudioPlayer */}
