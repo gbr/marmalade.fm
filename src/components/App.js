@@ -61,7 +61,7 @@ class App extends Component {
 
   render() {
     // if array is empty, assign default value of empty object
-    const [firstMix = {}] = this.props.mixes;
+    // const [firstMix = {}] = this.props.mixes;
 
     return (
       // router wraps our whole page and lets us use react-router
@@ -70,7 +70,7 @@ class App extends Component {
         <div>
           {/* page container */}
           <div className='flex-l justify-end'>`
-            <FeaturedMix {...this.state} {...this.actions} {...firstMix} />
+            <FeaturedMix />
             <div className="w-50-l relative z-1">
               <Header />
 
