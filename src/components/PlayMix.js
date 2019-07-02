@@ -6,9 +6,9 @@ import actions from '../store/actions'
 // this component wraps around anything
 // we want to play from click events
 // it purely provides functionality—no visual styling
-function PlayMix({ playMix, playing, id, currentMix, children }) {
+function PlayMix({ playMix, playing, id, currentMix, children, className }) {
     return (
-        <div className={`pointer ${id === currentMix && playing && 'playing'}`}
+        <div className={`${className} ${id === currentMix && playing && 'playing'}`}
             onClick={() => playMix({ currentMix: id, fromMixCloud: false })}>
             {children}
         </div>

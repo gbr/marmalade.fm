@@ -8,11 +8,15 @@ class Player extends Component {
 
     // gets props whenever they change
     componentWillReceiveProps(nextProps) {
-        const { playMix } = this.props;
+        // const { playMix } = this.props;
         if (!nextProps.widgetReady) return;
 
         if (nextProps.currentMix !== this.props.currentMix) {
+            // if there is a new mix in the props
+            // start playing the mix
             this.widget.load(nextProps.currentMix, true);
+            /// if the event hasn't come from mixcloud, we want to
+            // toggle the play/pause on our audio
         } else if (!nextProps.fromMixCloud) {
             this.widget.togglePlay();
         }
