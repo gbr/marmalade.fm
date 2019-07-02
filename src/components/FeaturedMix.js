@@ -30,9 +30,13 @@ const getMix = (state) => {
     // 2. if there's a currently playing mix, we show that next
     // 3. otherwise, we just show the first mix
 
-    const [featuredMix] = state.mixes.filter(mix => mix.id === state.featuredMix)
+    let featuredMix
 
-    const [playingMix] = state.mixes.filter(mix => mix.id === state.currentMix)
+    if (state.featuredMix) {
+        [featuredMix] = state.mixes.filter(mix => mix.id === state.featuredMix)
+    } else {
+        [featuredMix] = state.mixes.filter(mix => mix.id === state.currentMix)
+    }
 
     const [firstMix = {}] = state.mixes
 

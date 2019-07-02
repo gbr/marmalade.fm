@@ -28,6 +28,12 @@ class Show extends Component {
         setFeaturedMix(id)
     }
 
+    componentWillUnmount() {
+        const { setFeaturedMix } = this.props
+        // remove featuredMix from the redux state again
+        setFeaturedMix(false)
+    }
+
     render() {
         const { tags, description, play_count, created_time, audio_length } = this.props
         return (
