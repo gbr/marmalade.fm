@@ -16,12 +16,29 @@ const FeaturedMix = ({ name, pictures = {}, ...props }) => (
     </div>
 )
 
+// on the show page, we are going to set the featuredMix
+// to be teh currently viewed mix
+
+// if there's a mix playing, we want to set that as our
+// featured mix
+
+// if neither, we want to display our first mix as our featured mix
+
 // this is called a selector—it takes a certain piece of data from our state
-const getMix = (mixes) => {
-    const [firstMix = {}] = mixes
-    return firstMix;
+const getMix = (state) => {
+    // 1. if we have a featuredMix in redux, we show that first
+    // 2. if there's a currently playing mix, we show that next
+    // 3. otherwise, we just show the first mix
+
+    const [featuredMix] = state.mixes.filter(mix => mix.id === state.featuredMix)
+
+    const [playingMix] = state.mixes.filter(mix => mix.id === state.currentMix)
+
+    const [firstMix = {}] = state.mixes
+
+    return featuredMix || firstMix;
 }
 
 export default connect(state => ({
-    ...getMix(state.mixes)
+    ...getMix(state)
 }))(FeaturedMix)

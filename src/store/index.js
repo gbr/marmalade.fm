@@ -1,9 +1,10 @@
 const initialState = {
     mixes: [],
-    currentMix: 'groovy disco bangers',
+    currentMix: null,
     widgetReady: false,
     playing: false,
-    fromMixCloud: false
+    fromMixCloud: false,
+    featuredMix: null
 }
 
 export default (state = initialState, { type, payload }) => {
@@ -26,6 +27,11 @@ export default (state = initialState, { type, payload }) => {
                 widgetReady: true
             }
 
+        case 'SET_FEATURED_MIX':
+            return {
+                ...state,
+                featuredMix: payload
+            }
         default:
             return state
     }
